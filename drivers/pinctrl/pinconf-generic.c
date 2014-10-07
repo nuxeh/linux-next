@@ -228,12 +228,23 @@ int pinconf_generic_parse_dt_config(struct device_node *np,
 				    unsigned long **configs,
 				    unsigned int *nconfigs)
 {
+	const struct pinctrl_ops *ops = pctldev->desc->pctlops;
+	const struct pinconf_ops *conf_ops = pctldev->desc->confops;
 	unsigned long *cfg;
 	unsigned int max_cfg, ncfg = 0;
 	int ret;
+	int max_custom_cfg = 0;
+	int n_custom_cfg = 0;
+	int total_cfg;
 
 	if (!np)
 		return -EINVAL;
+
+	if (conf_ops && conf_ops->pin_config_get_max_custom_config)
+		max_custom_cfg = conf_ops->pin_config_get_max_custom_config(
+					pctldev);
+
+	total_cfg = ARRAY_SIZE(dt_params) + max_custom_cfg;
 
 	/* allocate a temporary array big enough to hold one of each option */
 	max_cfg = ARRAY_SIZE(dt_params);
@@ -250,6 +261,16 @@ int pinconf_generic_parse_dt_config(struct device_node *np,
 			     pctldev->desc->num_custom_params, cfg, &ncfg);
 
 	ret = 0;
+
+	if (ops && max_custom_cfg && ops->dt_node_to_custom_config) {
+		ret = ops->dt_node_to_custom_config(pctldev, np, &cfg[ncfg],
+				&n_custom_cfg);
+		if (ret < 0) {
+			pr_err("Parsing of custom parameter failed: %d\n", ret);
+			goto out;
+		}
+		ncfg += n_custom_cfg;
+	}
 
 	/* no configs found at all */
 	if (ncfg == 0) {
@@ -314,8 +335,8 @@ int pinconf_generic_dt_subnode_to_map(struct pinctrl_dev *pctldev,
 		function = NULL;
 	}
 
-	ret = pinconf_generic_parse_dt_config(np, pctldev, &configs,
-					      &num_configs);
+	ret = pinconf_generic_parse_dt_config(np, pctldev,
+				&configs, &num_configs);
 	if (ret < 0) {
 		dev_err(dev, "%s: could not parse node property\n",
 			of_node_full_name(np));
