@@ -416,6 +416,16 @@ config REGULATOR_MAX8998
 	  via I2C bus. The provided regulator is suitable for S3C6410
 	  and S5PC1XX chips to control VCC_CORE and VCC_USIM voltages.
 
+config REGULATOR_MAX77620
+	tristate "Maxim 77620 voltage regulator"
+	depends on MFD_MAX77620
+	help
+	  This driver controls a Maxim MAX77620 voltage regulator via
+	  the I2C bus. This driver is used on boards containing
+	  Tegra210 chips to control step-down DC-DC converters and
+	  LDOs.  If the board you're compiling for contains a Tegra210
+	  chip, you'll probably want to enable this driver.
+
 config REGULATOR_MAX77686
 	tristate "Maxim 77686 regulator"
 	depends on MFD_MAX77686
