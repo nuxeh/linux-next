@@ -241,7 +241,19 @@ source "drivers/pinctrl/nomadik/Kconfig"
 source "drivers/pinctrl/pxa/Kconfig"
 source "drivers/pinctrl/qcom/Kconfig"
 source "drivers/pinctrl/samsung/Kconfig"
+
+config PINCTRL_MAX77620
+        tristate "MAX77620 Pincontrol support"
+        depends on MFD_MAX77620
+        select GENERIC_PINCONF
+        help
+          Say Yes here to enable Pin control support for Maxim's PMIC MAX77620.
+          This PMIC has 8 GPIO pins that as well function in alternate mode.
+
 source "drivers/pinctrl/sh-pfc/Kconfig"
+
+
+
 source "drivers/pinctrl/spear/Kconfig"
 source "drivers/pinctrl/stm32/Kconfig"
 source "drivers/pinctrl/sunxi/Kconfig"
