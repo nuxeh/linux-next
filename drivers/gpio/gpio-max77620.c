@@ -233,18 +233,25 @@ static void max77620_gpio_set(struct gpio_chip *gpio, unsigned offset,
 static int max77620_gpio_to_irq(struct gpio_chip *gpio, unsigned offset)
 {
 	struct max77620_gpio *max77620_gpio = to_max77620_gpio(gpio);
-	struct max77620_chip *chip =
-				dev_get_drvdata(max77620_gpio->dev->parent);
-	return regmap_irq_get_virq(chip->gpio_irq_data, offset);
+	struct device *parent = max77620_gpio->dev->parent;
+	struct max77620_chip *chip = dev_get_drvdata(parent);
+
+	if (chip->gpio_irq_data)
+		return regmap_irq_get_virq(chip->gpio_irq_data, offset);
+
+	return 0;
 }
 
 static void max77620_gpio_irq_remove(struct max77620_gpio *max77620_gpio)
 {
-	struct max77620_chip *chip =
-				dev_get_drvdata(max77620_gpio->dev->parent);
-	regmap_del_irq_chip(max77620_gpio->gpio_irq,
-			chip->gpio_irq_data);
-	chip->gpio_irq_data = NULL;
+	struct device *parent = max77620_gpio->dev->parent;
+	struct max77620_chip *chip = dev_get_drvdata(parent);
+
+	if (chip->gpio_irq_data) {
+		regmap_del_irq_chip(max77620_gpio->gpio_irq,
+				chip->gpio_irq_data);
+		chip->gpio_irq_data = NULL;
+	}
 }
 
 static int max77620_gpio_probe(struct platform_device *pdev)
@@ -298,20 +305,18 @@ static int max77620_gpio_probe(struct platform_device *pdev)
 	max77620_gpio->gpio_base = max77620_gpio->gpio_chip.base;
 
 	ret = regmap_add_irq_chip(chip->rmap[MAX77620_PWR_SLAVE],
-		max77620_gpio->gpio_irq, IRQF_ONESHOT | IRQF_EARLY_RESUME,
-		max77620_gpio->irq_base,
-		&max77620_gpio_irq_chip, &chip->gpio_irq_data);
+				  max77620_gpio->gpio_irq,
+				  IRQF_ONESHOT | IRQF_EARLY_RESUME,
+				  max77620_gpio->irq_base,
+				  &max77620_gpio_irq_chip,
+				  &chip->gpio_irq_data);
 	if (ret < 0) {
 		dev_err(&pdev->dev, "Failed to add gpio irq_chip %d\n", ret);
-		goto fail;
+		chip->gpio_irq_data = NULL;
 	}
 
 	dev_info(&pdev->dev, "max77620 gpio successfully initialized\n");
 	return 0;
-
-fail:
-	gpiochip_remove(&max77620_gpio->gpio_chip);
-	return ret;
 }
 
 static int max77620_gpio_remove(struct platform_device *pdev)
