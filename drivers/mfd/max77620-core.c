@@ -493,6 +493,8 @@ static int max77620_probe(struct i2c_client *client,
 {
 	struct device_node *node = client->dev.of_node;
 	struct max77620_chip *chip;
+	struct irq_data *irq_data;
+	unsigned long irq_flags;
 	int i = 0;
 	int ret = 0;
 
@@ -545,13 +547,19 @@ static int max77620_probe(struct i2c_client *client,
 	}
 
 	//max77620_top_irq_chip.pre_post_irq_data = chip;
+	if (0) {
+	irq_data = irq_get_irq_data(client->irq);
+	irq_flags = irqd_get_trigger_type(irq_data);
 
 	ret = regmap_add_irq_chip(chip->rmap[MAX77620_PWR_SLAVE],
-		chip->chip_irq, IRQF_ONESHOT | IRQF_SHARED, chip->irq_base,
-		&max77620_top_irq_chip, &chip->top_irq_data);
+				  chip->chip_irq,
+				  IRQF_ONESHOT | IRQF_SHARED | irq_flags,
+				  chip->irq_base, &max77620_top_irq_chip,
+				  &chip->top_irq_data);
 	if (ret < 0) {
 		dev_err(chip->dev, "Failed to add top irq_chip %d\n", ret);
 		goto fail_client_reg;
+	}
 	}
 
 	ret = max77620_initialise_fps(chip, &client->dev);

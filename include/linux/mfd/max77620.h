@@ -407,7 +407,10 @@ static inline int max77620_irq_get_virq(struct device *dev, int irq)
 {
 	struct max77620_chip *chip = dev_get_drvdata(dev);
 
-	return regmap_irq_get_virq(chip->top_irq_data, irq);
+	if (chip->top_irq_data)
+		return regmap_irq_get_virq(chip->top_irq_data, irq);
+
+	return 0;
 }
 
 static inline int max77620_reg_write(struct device *dev, int sid,
