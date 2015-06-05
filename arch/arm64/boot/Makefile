@@ -14,7 +14,7 @@
 # Based on the ia64 boot/Makefile.
 #
 
-targets := Image Image.gz
+targets := Image Image.gz Image.fit
 
 $(obj)/Image: vmlinux FORCE
 	$(call if_changed,objcopy)
@@ -33,6 +33,15 @@ $(obj)/Image.lzma: $(obj)/Image FORCE
 
 $(obj)/Image.lzo: $(obj)/Image FORCE
 	$(call if_changed,lzo)
+
+quiet_cmd_fitimage = DTC     $@ ($(DTB_OBJS))
+      cmd_fitimage = $(CONFIG_SHELL) $(srctree)/scripts/generate-its-script.sh \
+			-a $(ARCH) $< $(DTB_OBJS) | \
+			$(objtree)/scripts/dtc/dtc -I dts -O dtb -p 1024 > $@
+			#-a $(ARCH) -r ~/src/pbs.git/build/tegra210/initrd.gz $< $(DTB_OBJS) |
+
+$(obj)/Image.fit: $(obj)/Image $(DTB_OBJS) FORCE
+	$(call if_changed,fitimage)
 
 install: $(obj)/Image
 	$(CONFIG_SHELL) $(srctree)/$(src)/install.sh $(KERNELRELEASE) \
