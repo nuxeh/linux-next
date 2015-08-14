@@ -723,7 +723,7 @@ static const struct of_device_id imx_tve_dt_ids[] = {
 };
 MODULE_DEVICE_TABLE(of, imx_tve_dt_ids);
 
-static struct platform_driver imx_tve_driver = {
+struct platform_driver imx_tve_driver = {
 	.probe		= imx_tve_probe,
 	.remove		= imx_tve_remove,
 	.driver		= {
@@ -731,8 +731,6 @@ static struct platform_driver imx_tve_driver = {
 		.name	= "imx-tve",
 	},
 };
-
-module_platform_driver(imx_tve_driver);
 
 MODULE_DESCRIPTION("i.MX Television Encoder driver");
 MODULE_AUTHOR("Philipp Zabel, Pengutronix");
