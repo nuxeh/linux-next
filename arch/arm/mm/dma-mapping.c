@@ -141,7 +141,6 @@ struct dma_map_ops arm_dma_ops = {
 	.sync_single_for_device	= arm_dma_sync_single_for_device,
 	.sync_sg_for_cpu	= arm_dma_sync_sg_for_cpu,
 	.sync_sg_for_device	= arm_dma_sync_sg_for_device,
-	.set_dma_mask		= arm_dma_set_mask,
 };
 EXPORT_SYMBOL(arm_dma_ops);
 
@@ -160,7 +159,6 @@ struct dma_map_ops arm_coherent_dma_ops = {
 	.get_sgtable		= arm_dma_get_sgtable,
 	.map_page		= arm_coherent_dma_map_page,
 	.map_sg			= arm_dma_map_sg,
-	.set_dma_mask		= arm_dma_set_mask,
 };
 EXPORT_SYMBOL(arm_coherent_dma_ops);
 
@@ -1003,16 +1001,6 @@ int dma_supported(struct device *dev, u64 mask)
 	return __dma_supported(dev, mask, false);
 }
 EXPORT_SYMBOL(dma_supported);
-
-int arm_dma_set_mask(struct device *dev, u64 dma_mask)
-{
-	if (!dev->dma_mask || !dma_supported(dev, dma_mask))
-		return -EIO;
-
-	*dev->dma_mask = dma_mask;
-
-	return 0;
-}
 
 #define PREALLOC_DMA_DEBUG_ENTRIES	4096
 
@@ -1867,8 +1855,6 @@ struct dma_map_ops iommu_ops = {
 	.unmap_sg		= arm_iommu_unmap_sg,
 	.sync_sg_for_cpu	= arm_iommu_sync_sg_for_cpu,
 	.sync_sg_for_device	= arm_iommu_sync_sg_for_device,
-
-	.set_dma_mask		= arm_dma_set_mask,
 };
 
 struct dma_map_ops iommu_coherent_ops = {
@@ -1882,8 +1868,6 @@ struct dma_map_ops iommu_coherent_ops = {
 
 	.map_sg		= arm_coherent_iommu_map_sg,
 	.unmap_sg	= arm_coherent_iommu_unmap_sg,
-
-	.set_dma_mask	= arm_dma_set_mask,
 };
 
 /**
