@@ -125,6 +125,7 @@
 			reg = <0x0 0x54100000 0x0 0x00040000>;
 		};
 
+		/*
 		dc@0,54200000 {
 			compatible = "nvidia,tegra210-dc";
 			reg = <0x0 0x54200000 0x0 0x00040000>;
@@ -139,6 +140,7 @@
 
 			nvidia,head = <0>;
 		};
+		*/
 
 		dc@0,54240000 {
 			compatible = "nvidia,tegra210-dc";
