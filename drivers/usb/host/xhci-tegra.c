@@ -951,6 +951,8 @@ static void tegra_xusb_probe_finish(const struct firmware *fw, void *context)
 	struct xhci_hcd *xhci = NULL;
 	int err;
 
+	printk("Finishing Tegra XUSB probe - firmware");
+
 	if (!fw) {
 		dev_err(tegra->dev, "no firmware loaded\n");
 		goto put_usb2_hcd;
@@ -1056,6 +1058,8 @@ static int tegra_xusb_probe(struct platform_device *pdev)
 	struct usb_hcd *hcd;
 	struct phy *phy;
 	int err;
+
+	printk("Probing XUSB driver XUSB driver!!");
 
 	BUILD_BUG_ON(sizeof(struct tegra_xusb_fw_header) != 256);
 
