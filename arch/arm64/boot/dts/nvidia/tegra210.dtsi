@@ -701,7 +701,7 @@
 	};
 
 	sata@0,70020000 {
-		compatible = "nvidia,tegra210-ahci";
+		compatible = "nvidia,tegra210-ahci", "nvidia,tegra124-ahci";
 		reg = <0x0 0x70027000 0x0 0x2000>, /* AHCI */
 		      <0x0 0x70020000 0x0 0x7000>; /* SATA */
 		interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
