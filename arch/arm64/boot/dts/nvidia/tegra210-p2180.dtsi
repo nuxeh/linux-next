@@ -320,6 +320,10 @@
 		non-removable;
 	};
 
+	sata@0,70020000 {
+		status = "okay";
+	};
+
 	clocks {
 		compatible = "simple-bus";
 		#address-cells = <1>;
