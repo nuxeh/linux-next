@@ -1031,5 +1031,13 @@ config PATA_LEGACY
 
 	  If unsure, say N.
 
+config ATA_DEBUG
+	bool "ATA debug"
+	default n
+
+config ATA_VERBOSE_DEBUG
+	bool "ATA verbose debug"
+	default n
+
 endif # ATA_SFF
 endif # ATA
