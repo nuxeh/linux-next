@@ -820,7 +820,7 @@ void ata_scsi_port_error_handler(struct Scsi_Host *host, struct ata_port *ap)
 		schedule_delayed_work(&ap->hotplug_task, 0);
 
 	if (ap->pflags & ATA_PFLAG_RECOVERED)
-		ata_port_info(ap, "EH complete\n");
+		ata_port_info(ap, "EH complete\n"); //**
 
 	ap->pflags &= ~(ATA_PFLAG_SCSI_HOTPLUG | ATA_PFLAG_RECOVERED);
 
@@ -3675,7 +3675,7 @@ static int ata_eh_handle_dev_fail(struct ata_device *dev, int err)
 			/* This is the last chance, better to slow
 			 * down than lose it.
 			 */
-			sata_down_spd_limit(ata_dev_phys_link(dev), 0);
+			sata_down_spd_limit(ata_dev_phys_link(dev), 0); //**
 			if (dev->pio_mode > XFER_PIO_0)
 				ata_down_xfermask_limit(dev, ATA_DNXFER_PIO);
 		}

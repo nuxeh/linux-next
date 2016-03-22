@@ -1673,7 +1673,7 @@ unsigned ata_exec_internal_sg(struct ata_device *dev,
 
 			if (ata_msg_warn(ap))
 				ata_dev_warn(dev, "qc timeout (cmd 0x%x)\n",
-					     command);
+					     command); //**
 		}
 
 		spin_unlock_irqrestore(ap->lock, flags);
@@ -1939,7 +1939,7 @@ retry:
 
 		rc = -EIO;
 		reason = "I/O error";
-		goto err_out;
+		goto err_out; //**
 	}
 
 	if (dev->horkage & ATA_HORKAGE_DUMP_ID) {
@@ -2032,7 +2032,7 @@ retry:
  err_out:
 	if (ata_msg_warn(ap))
 		ata_dev_warn(dev, "failed to IDENTIFY (%s, err_mask=0x%x)\n",
-			     reason, err_mask);
+			     reason, err_mask); //**
 	return rc;
 }
 
@@ -2811,7 +2811,7 @@ int sata_down_spd_limit(struct ata_link *link, u32 spd_limit)
 	link->sata_spd_limit = mask;
 
 	ata_link_warn(link, "limiting SATA link speed to %s\n",
-		      sata_spd_string(fls(mask)));
+		      sata_spd_string(fls(mask))); //**
 
 	return 0;
 }
@@ -3849,7 +3849,7 @@ int sata_link_hardreset(struct ata_link *link, const unsigned long *timing,
 		/* online is set iff link is online && reset succeeded */
 		if (online)
 			*online = false;
-		ata_link_err(link, "COMRESET failed (errno=%d)\n", rc);
+		ata_link_err(link, "COMRESET failed (errno=%d)\n", rc); //**
 	}
 	DPRINTK("EXIT, rc=%d\n", rc);
 	return rc;
