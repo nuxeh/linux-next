@@ -52,6 +52,7 @@
 #include <linux/tegra-soc.h>
 #include <linux/of_device.h>
 #include "../../arch/arm/mach-tegra/iomap.h"
+#include "../../arch/arm64/include/asm/io.h"
 #include <linux/tegra_prod.h>
 
 #define DRV_NAME	"tegra-sata"
