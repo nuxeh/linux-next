@@ -57,6 +57,12 @@
 #define DRV_NAME	"tegra-sata"
 #define DRV_VERSION	"1.0"
 
+#define TEGRA_SATA_BAR5_BASE		0x70027000
+#define TEGRA_SATA_BAR5_SIZE		SZ_8K
+
+#define TEGRA_XUSB_PADCTL_BASE		0x7009F000
+#define TEGRA_XUSB_PADCTL_SIZE		SZ_4K
+
 #define ENABLE_AHCI_DBG_PRINT			0
 #if ENABLE_AHCI_DBG_PRINT
 #define AHCI_DBG_PRINT(fmt, arg...)  printk(KERN_ERR fmt, ## arg)
