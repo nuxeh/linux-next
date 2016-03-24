@@ -94,6 +94,14 @@
 #define TEGRA_CSITE_BASE		0x70040000
 #define TEGRA_CSITE_SIZE		SZ_256K
 
+#if defined(CONFIG_ARCH_TEGRA_2x_SOC)
+#define TEGRA_SATA_BAR5_BASE		0x70027000
+#define TEGRA_SATA_BAR5_SIZE		SZ_8K
+
+#define TEGRA_XUSB_PADCTL_BASE		0x7009F000
+#define TEGRA_XUSB_PADCTL_SIZE		SZ_4K
+#endif
+
 /* On TEGRA, many peripherals are very closely packed in
  * two 256MB io windows (that actually only use about 64KB
  * at the start of each).
