@@ -47,7 +47,7 @@
 
 #include <linux/clk.h>
 #include <linux/clk/tegra.h>
-#include <linux/tegra-powergate.h>
+#include <soc/tegra/pmc.h>
 #include <linux/platform_data/tegra_ahci.h>
 #include <linux/tegra-soc.h>
 #include <linux/of_device.h>
